@@ -55,15 +55,18 @@ def get_labelEncoder(train, test, c):
 
 
 if __name__ == '__main__':
+    seed = 0
+    label = '收率'
+    Online = False
+
     train, test, sub = get_Data()
     CategoricalFeature = get_CategoricalFeature(train)
     for i in CategoricalFeature:
         get_labelEncoder(train, test, i)
 
-    seed = 0
-    label = '收率'
     feature = [i for i in train.columns if i not in ['样本id', '收率']]
-    X_train, X_valid, y_train, y_valid = train_test_split(train[feature], train[label], test_size=0.33,random_state=seed)
+    X_train, X_valid, y_train, y_valid = train_test_split(train[feature], train[label], test_size=0.33,
+                                                          random_state=seed)
 
     clf_xgboost = xgb.XGBRegressor(learning_rate=0.8, max_depth=4, n_estimators=1000, silent=True,
                                    objective='reg:linear', booster='gbtree', min_child_weight=1.4,  # 叶子节点中分裂时最小的样本权重和
@@ -75,16 +78,21 @@ if __name__ == '__main__':
                                    reg_lambda=1,  # L2正则
                                    scale_pos_weight=1,  # 正负样本的平衡
                                    random_state=2018)
-    clf_xgboost.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                    eval_metric='error', early_stopping_rounds=100, verbose=True)
+    clf_xgboost.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_valid, y_valid)], eval_metric='error',
+                    early_stopping_rounds=100, verbose=True)
 
-    train_pred = clf_xgboost.predict(X_train, ntree_limit=clf_xgboost.best_ntree_limit)
-    valid_pred = clf_xgboost.predict(X_valid, ntree_limit=clf_xgboost.best_ntree_limit)
+    # train_pred = clf_xgboost.predict(X_train, ntree_limit=clf_xgboost.best_ntree_limit)
+    # valid_pred = clf_xgboost.predict(X_valid, ntree_limit=clf_xgboost.best_ntree_limit)
 
     fm = pd.DataFrame(clf_xgboost.feature_importances_, columns=['score'])
     fm['feature'] = feature
     fm.sort_values(by=['score'], inplace=True, ascending=False)
     print(fm)
+
+    if Online != False:
+        test_pred = clf_xgboost.predict(test[feature], ntree_limit=clf_xgboost.best_ntree_limit)
+        sub[1] = test_pred
+        sub.to_csv('20190102_1.csv', index=None, header=None)
 
 
 
