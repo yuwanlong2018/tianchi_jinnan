@@ -20,7 +20,17 @@ train = pd.read_csv('jinnan_round1_train_20181227.csv', encoding = 'gb18030')
 test = pd.read_csv('jinnan_round1_testA_20181227.csv', encoding = 'gb18030')
 sub = pd.read_csv('jinnan_round1_submit_20181227.csv', encoding = 'gb18030')
 
-def fea_categorical_check(df):
+
+def get_TrainTestSplit(train, feature, label, seed=0):
+    # 用于训练集和验证集的划分
+    X_train, X_valid, y_train, y_valid = train_test_split(train[feature], train[label], test_size=0.33, random_state=seed)
+    data = {}
+    data['all'] = train[label]
+    data['train'] = y_train
+    data['valid'] = y_valid
+    sns.swarmplot(data=pd.DataFrame(data))
+
+def get_CategoricalFeature(df):
     # 寻找描述变量
     cat_vars = []
     print ("\n描述变量有:")
@@ -28,10 +38,10 @@ def fea_categorical_check(df):
         if df[col].dtype == "object":
             print (col)
             cat_vars.append(col)
-
     return cat_vars
 
 def get_labelEncoder(train, test, c):
+    # 用于字符串的编码
     le = preprocessing.LabelEncoder()
     le.fit(train[c])
     test[c] = test[c].map(lambda s: '<unknown>' if s not in le.classes_ else s)
