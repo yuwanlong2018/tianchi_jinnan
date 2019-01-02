@@ -46,11 +46,12 @@ def get_CategoricalFeature(df):
 def get_labelEncoder(train, test, c):
     # 用于字符串的编码
     le = preprocessing.LabelEncoder()
-    le.fit(train[c])
+    le.fit(train[c].fillna('0'))
     test[c] = test[c].map(lambda s: '<unknown>' if s not in le.classes_ else s)
     le.classes_ = np.append(le.classes_, '<unknown>')
-    train[c] = le.transform(train[c])
-    test[c] = le.transform(test[c])
+    train[c] = le.transform(train[c].fillna('0'))
+    test[c] = le.transform(test[c].fillna('0'))
+    print('finish LabelEncoder feature {}'.format(c))
 
 
 if __name__ == '__main__':
