@@ -7,10 +7,8 @@ import os
 import time
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import xgboost as xgb
 import lightgbm as lgb
-import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 
@@ -22,15 +20,6 @@ def get_Data():
 
     return train, test, sub
 
-
-def get_TrainValidSplit(train, feature, label, seed=0):
-    # 用于训练集和验证集的划分
-    X_train, X_valid, y_train, y_valid = train_test_split(train[feature], train[label], test_size=0.33, random_state=seed)
-    data = {}
-    data['all'] = train[label]
-    data['train'] = y_train
-    data['valid'] = y_valid
-    sns.swarmplot(data=pd.DataFrame(data))
 
 def get_CategoricalFeature(df):
     # 寻找描述变量
@@ -52,6 +41,9 @@ def get_labelEncoder(train, test, c):
     train[c] = le.transform(train[c].fillna('0'))
     test[c] = le.transform(test[c].fillna('0'))
     print('finish LabelEncoder feature {}'.format(c))
+
+
+
 
 
 if __name__ == '__main__':
@@ -99,7 +91,6 @@ if __name__ == '__main__':
 
 
 
-123
 
 
 
