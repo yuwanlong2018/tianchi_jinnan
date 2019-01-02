@@ -15,10 +15,10 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 
 def get_Data():
-    os.chdir('/home/webedit/user/yuwanlong/cm/jinan')
+    os.chdir('G:\competition\tianchi_jinnan\data')
     train = pd.read_csv('jinnan_round1_train_20181227.csv', encoding = 'gb18030')
     test = pd.read_csv('jinnan_round1_testA_20181227.csv', encoding = 'gb18030')
-    sub = pd.read_csv('jinnan_round1_submit_20181227.csv', encoding = 'gb18030')
+    sub = pd.read_csv('jinnan_round1_submit_20181227.csv', header=None, encoding = 'gb18030')
 
     return train, test, sub
 
@@ -68,7 +68,10 @@ if __name__ == '__main__':
     X_train, X_valid, y_train, y_valid = train_test_split(train[feature], train[label], test_size=0.33,
                                                           random_state=seed)
 
-    clf_xgboost = xgb.XGBRegressor(learning_rate=0.8, max_depth=4, n_estimators=1000, silent=True,
+    clf_xgboost = xgb.XGBRegressor(learning_rate=0.8,
+                                   max_depth=4,
+                                   n_estimators=1000,
+                                   silent=True,
                                    objective='reg:linear', booster='gbtree', min_child_weight=1.4,  # 叶子节点中分裂时最小的样本权重和
                                    gamma=0,  # 指定了节点分裂所需的最小损失函数下降值
                                    subsample=1,  # 用于每棵树随机采样的比例
@@ -81,8 +84,6 @@ if __name__ == '__main__':
     clf_xgboost.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_valid, y_valid)], eval_metric='error',
                     early_stopping_rounds=100, verbose=True)
 
-    # train_pred = clf_xgboost.predict(X_train, ntree_limit=clf_xgboost.best_ntree_limit)
-    # valid_pred = clf_xgboost.predict(X_valid, ntree_limit=clf_xgboost.best_ntree_limit)
 
     fm = pd.DataFrame(clf_xgboost.feature_importances_, columns=['score'])
     fm['feature'] = feature
@@ -98,7 +99,7 @@ if __name__ == '__main__':
 
 
 
-
+123
 
 
 
