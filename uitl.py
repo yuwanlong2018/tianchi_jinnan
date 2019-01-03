@@ -1,53 +1,62 @@
+#!/bin/env python
 # coding=utf-8
 # Author:哟嚯走大运了
 # Date:2019-01-02
 # Email: yuwanlong2018@163.com
 
 import pandas as pd
-def merge_count(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].count()).reset_index()
-    add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+def merge_count(train, test, columns, value, cname):
+    add=pd.DataFrame(train.groupby(columns)[value].count()).reset_index()
+    add.columns = columns + [cname]
+    train = train.merge(add,on=columns,how="left")
+    test = test.merge(add,on=columns,how="left")
+    return train, test
 
-def merge_nunique(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].nunique()).reset_index()
+def merge_nunique(train, test, columns, value, cname):
+    add = pd.DataFrame(train.groupby(columns)[value].nunique()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add,on=columns,how="left")
+    return train,test
 
-def merge_median(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].median()).reset_index()
+def merge_median(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].median()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
 
-def merge_mean(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].mean()).reset_index()
+def merge_mean(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].mean()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
 
-def merge_sum(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].sum()).reset_index()
+def merge_sum(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].sum()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
 
-def merge_max(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].max()).reset_index()
+def merge_max(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].max()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
 
-def merge_min(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].min()).reset_index()
+def merge_min(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].min()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
 
-def merge_std(df,columns,value,cname):
-    add = pd.DataFrame(df.groupby(columns)[value].std()).reset_index()
+def merge_std(train,test,columns,value,cname):
+    add = pd.DataFrame(train.groupby(columns)[value].std()).reset_index()
     add.columns=columns+[cname]
-    df=df.merge(add,on=columns,how="left")
-    return df
+    train=train.merge(add,on=columns,how="left")
+    test=test.merge(add, on=columns, how="left")
+    return train,test
